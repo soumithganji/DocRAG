@@ -71,7 +71,7 @@ A production-ready platform for intelligent document analysis, leveraging RAG wi
 ### Prerequisites
 
 - Python 3.10+
-- [NVIDIA API Key](https://build.nvidia.com/)
+- [NVIDIA API Key]
 - Pinecone account for cloud vector storage
 - System libraries for OCR:
   ```bash
