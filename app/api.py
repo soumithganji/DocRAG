@@ -32,27 +32,21 @@ try:
 except ImportError:
     ADVANCED_LOADERS_AVAILABLE = False
 
-# Local modules --------------------------------------------------------------
-from utils.logger import (
-    logger,
-    log_request
-)
-from rag_logic import create_rag_chain, NVIDIA_LLM_MODEL, query_cache
-from utils.db_utils import setup_database, log_request
+# Local modules - updated imports for new structure
+from core.logger import logger, log_request as logger_log_request
+from app.rag_logic import create_rag_chain, NVIDIA_LLM_MODEL, query_cache
+from core.db import setup_database, log_request
 
 load_dotenv()
 setup_database()
 
 # FastAPI init ---------------------------------------------------------------
-from fastapi import FastAPI
-
 app = FastAPI(
-    title="DocuXment – Legal Document Simplifier",
+    title="DocRAG – Document Q&A with RAG",
     description=(
-        "An AI-powered platform that uses Generative AI to demystify "
-        "complex legal documents. It provides clear summaries, explains complicated "
-        "clauses, and answers user questions in simple, accessible language — empowering "
-        "users to make informed decisions and reduce legal and financial risks."
+        "An AI-powered platform that uses Retrieval-Augmented Generation (RAG) to "
+        "analyze complex documents. It provides clear summaries, explains complicated "
+        "clauses, and answers user questions in simple, accessible language."
     ),
     version="1.0.0",
 )
@@ -262,4 +256,4 @@ def health():
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("api:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run("app.api:app", host="0.0.0.0", port=port, reload=False)

@@ -1,42 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Document Analyzer</title>
+    <title>DocRAG - AI Document Analyzer</title>
     <!-- Added fallback styling and improved CSS loading -->
     <style>
         /* Fallback styles to ensure basic styling even if external CSS fails */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8fafc;
             color: #334155;
             line-height: 1.6;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
-        .header { text-align: center; padding: 2rem 0; border-bottom: 1px solid #e2e8f0; }
-        .logo { display: flex; align-items: center; justify-content: center; gap: 1rem; }
-        .logo h1 { font-size: 2rem; color: #059669; font-weight: 700; }
-        .section { background: white; border-radius: 8px; padding: 2rem; margin: 1rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .upload-area { border: 2px dashed #d1d5db; border-radius: 8px; padding: 2rem; text-align: center; }
-        .btn { background: #059669; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer; }
-        .btn:hover { background: #047857; }
-        input, select, textarea { padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            color: #4248f5;
+            font-weight: 700;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .btn {
+            background: #4248f5;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #3339c4;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            width: 100%;
+        }
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <header class="header">
             <div class="logo">
-                <i class="fas fa-brain" style="font-size: 2rem; color: #059669;"></i>
-                <h1>AI Document Analyzer</h1>
+                <h1>DocRAG</h1>
             </div>
-            <p class="subtitle">v3.0 • RAG Powered • Multi-Format</p>
+            <p class="subtitle">AI Document Analyzer • RAG Powered • Multi-Format</p>
         </header>
 
         <!-- Main Form -->
@@ -44,7 +103,7 @@
             <!-- Configuration Section -->
             <div class="section config-section">
                 <h2><i class="fas fa-cog"></i> Configuration</h2>
-                
+
                 <div class="config-grid">
                     <div class="form-group">
                         <label for="model" class="form-label">
@@ -52,7 +111,7 @@
                         </label>
                         <select name="model" id="model" class="form-select">
                             {% for model in model_choices %}
-                            <option value="{{ model }}" {% if model == selected_model %}selected{% endif %}>
+                            <option value="{{ model }}" {% if model==selected_model %}selected{% endif %}>
                                 {{ model.split('/')[-1].replace('-', ' ').title() }}
                             </option>
                             {% endfor %}
@@ -61,12 +120,11 @@
 
                     <div class="form-group">
                         <label for="temperature" class="form-label">
-                            <i class="fas fa-thermometer-half"></i> Temperature: <span id="tempValue">{{ selected_temp }}</span>
+                            <i class="fas fa-thermometer-half"></i> Temperature: <span id="tempValue">{{ selected_temp
+                                }}</span>
                         </label>
-                        <input type="range" name="temperature" id="temperature" min="0" max="1" step="0.1" value="{{ selected_temp }}" class="temperature-slider">
-                        <div class="slider-labels">
-                            <span>Focused Creative</span>
-                        </div>
+                        <input type="range" name="temperature" id="temperature" min="0" max="1" step="0.1"
+                            value="{{ selected_temp }}" class="temperature-slider">
                     </div>
                 </div>
             </div>
@@ -74,13 +132,14 @@
             <!-- Upload Documents Section -->
             <div class="section upload-section">
                 <h2><i class="fas fa-upload"></i> Upload Documents</h2>
-                
+
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-content">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <p class="upload-text">Drag & drop files here or <span class="upload-link">browse</span></p>
                         <p class="upload-formats">Supports PDF, DOCX, PPTX, XLSX, TXT</p>
-                        <input type="file" name="documents" multiple accept=".pdf,.docx,.doc,.pptx,.ppt,.xlsx,.xls,.txt" class="file-input" id="fileInput">
+                        <input type="file" name="documents" multiple accept=".pdf,.docx,.doc,.pptx,.ppt,.xlsx,.xls,.txt"
+                            class="file-input" id="fileInput">
                     </div>
                 </div>
             </div>
@@ -88,13 +147,16 @@
             <!-- Document URLs Section -->
             <div class="section url-section">
                 <h2><i class="fas fa-link"></i> Document URLs</h2>
-                <textarea name="document_links" id="document_links" placeholder="Enter document URLs (one per line)&#10;https://example.com/document.pdf" class="url-input">{{ request.form.get('document_links', '') }}</textarea>
+                <textarea name="document_links" id="document_links"
+                    placeholder="Enter document URLs (one per line)&#10;https://example.com/document.pdf"
+                    class="url-input">{{ request.form.get('document_links', '') }}</textarea>
             </div>
 
             <!-- Question Section -->
             <div class="section question-section">
                 <h2><i class="fas fa-question-circle"></i> Your Question</h2>
-                <textarea name="question" id="question" placeholder="Ask anything about your documents..." class="question-input" required>{{ query_text }}</textarea>
+                <textarea name="question" id="question" placeholder="Ask anything about your documents..."
+                    class="question-input" required>{{ query_text }}</textarea>
                 <button type="submit" class="submit-btn">
                     <i class="fas fa-paper-plane"></i> Analyze
                 </button>
@@ -105,7 +167,7 @@
         {% if answer %}
         <div class="section results-section">
             <h2><i class="fas fa-lightbulb"></i> Analysis Results</h2>
-            
+
             <div class="answer-card">
                 <div class="answer-header">
                     <i class="fas fa-robot"></i>
@@ -137,7 +199,7 @@
         <div class="section ready-section">
             <h2><i class="fas fa-check-circle"></i> Ready to Analyze</h2>
             <p>Upload documents or provide URLs, then ask your question to get started.</p>
-            
+
             <div class="example-questions">
                 <h3>Example Questions:</h3>
                 <ul>
@@ -157,16 +219,16 @@
 
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                <div class="flash-message flash-{{ category }}">
-                    <i class="fas fa-{% if category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                    {{ message }}
-                </div>
-                {% endfor %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">
+                <i class="fas fa-{% if category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
             </div>
-            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
     </div>
 
@@ -184,11 +246,12 @@
             const chatHistory = document.getElementById('chatHistory');
             chatHistory.style.display = chatHistory.style.display === 'none' ? 'block' : 'none';
         }
-        
+
         // Temperature slider update
-        document.getElementById('temperature').addEventListener('input', function() {
+        document.getElementById('temperature').addEventListener('input', function () {
             document.getElementById('tempValue').textContent = this.value;
         });
     </script>
 </body>
+
 </html>

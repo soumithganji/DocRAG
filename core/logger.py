@@ -1,4 +1,4 @@
-# OPTIMIZED logger.py - HackRx 6.0 Competition Version
+# DocRAG Logger - High-performance logging for RAG applications
 
 import os
 import logging
@@ -7,14 +7,14 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 import threading
 
-# --- Competition-Optimized Logging Configuration ---
+# --- Logging Configuration ---
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 class Logger:
     """
-    High-performance logger optimized for app.
-    Features: Performance tracking, error monitoring, and competition metrics
+    High-performance logger optimized for DocRAG.
+    Features: Performance tracking, error monitoring, and metrics
     """
     
     def __init__(self):
@@ -46,7 +46,7 @@ class Logger:
         metrics_log_file = os.path.join(LOG_DIR, f"{session_timestamp}_metrics.log")
         
         # Create logger instance
-        self.logger = logging.getLogger("Logger")
+        self.logger = logging.getLogger("DocRAG")
         self.logger.setLevel(logging.DEBUG)
         
         # Clear any existing handlers
@@ -197,7 +197,7 @@ class Logger:
             uptime = (datetime.now() - metrics["session_start"]).total_seconds() / 60
         
         metrics_summary = (
-            f"📊 COMPETITION METRICS | "
+            f"📊 METRICS | "
             f"Requests: {metrics['total_requests']} | "
             f"Avg Response: {metrics['avg_response_time']:.2f}s | "
             f"Cache Hits: {metrics['cache_hits']} | "

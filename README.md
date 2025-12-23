@@ -1,9 +1,9 @@
 <div align="center">
-<a href="https://ibb.co/1fN1SP6M"><img src="https://i.ibb.co/6RSzdTB8/Gemini-Generated-Image-oimnesoimnesoimn.png" alt="DocuXment-App" border="0"></a>
 
-# DocuXment
 
-**A robust, production-ready platform for complex document analysis, leveraging Retrieval-Augmented Generation (RAG) with NVIDIA LLMs, advanced document ingestion, and multi-format support. It offers both an interactive web interface and an API for real-time insurance Q&A powered by modern vector databases and cloud deployment.**
+# DocRAG
+
+**A robust, production-ready platform for complex document analysis, leveraging Retrieval-Augmented Generation (RAG) with NVIDIA LLMs, advanced document ingestion, and multi-format support. It offers both an interactive web interface and an API for real-time document Q&A powered by modern vector databases and cloud deployment.**
 
 </div>
 
@@ -13,8 +13,6 @@
 [![Python Version](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Framework: FastAPI](https://img.shields.io/badge/Framework-FastAPI-green.svg)](https://fastapi.tiangolo.com/)
 [![Framework: Flask](https://img.shields.io/badge/Framework-Flask-blue.svg)](https://flask.palletsprojects.com/)
-[![GitHub stars](https://img.shields.io/github/stars/ArpitKadam/DocuXment-App?style=social)](https://github.com/ArpitKadam/DocuXment-App/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/ArpitKadam/DocuXment-App?style=social)](https://github.com/ArpitKadam/DocuXment-App/network/members)
 
 </div>
 
@@ -22,10 +20,10 @@
 
 ## Live Demo
 
-* **Web App:** [https://docuxment-app-1.onrender.com](https://docuxment-app-1.onrender.com)
-* **API Endpoint:** [https://docuxment-app.onrender.com/api/v1/hackrx/run](https://docuxment-app.onrender.com/api/v1/run)
+* **Web App:** Coming soon
+* **API Endpoint:** `/api/v1/run`
     * **Method:** `POST`
-    * **Bearer Token:** `DocuXmentAI`
+    * **Bearer Token:** Set via `AUTH_TOKEN` env variable
 
 ---
 
@@ -82,8 +80,8 @@
 Clone the repository and set up the Python environment:
 
 ```Bash
-git clone https://github.com/ArpitKadam/DocuXment-App.git
-cd DocuXment-App
+git clone <your-repo-url>
+cd DocRAG
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -92,28 +90,28 @@ pip install -r requirements.txt
 ### 3. Setup Environment Variables
 Create a .env file in the root directory and add your secret keys:
 
-Code snippet
 ```
-AUTH_TOKEN="DocuXmentAI"
+AUTH_TOKEN="your_auth_token"
 NVIDIA_API_KEY="your_nvidia_api_key"
 PINECONE_INDEX_NAME="your_pinecone_index"
-FLASK_SECRET="your_flask_secret" # Optional, for Flask session security
+FLASK_SECRET="your_flask_secret"
 ```
 ### 4. Run Locally
 Start the backend and frontend servers in separate terminals.
 
-Backend (FastAPI):
+Flask Web UI:
 
 ```Bash
-uvicorn api:app --host 0.0.0.0 --port 8000
+python run_flask.py
 ```
-Frontend (Flask):
+
+FastAPI Backend:
 
 ```Bash
-python flask_app.py
+python run_api.py
 ```
 
-🌐 Web UI: Visit http://localhost:5000
+🌐 Web UI: Visit http://localhost:8000
 
 📚 API Docs: Visit http://localhost:8000/docs
 
@@ -159,16 +157,22 @@ Example Response:
 
 ```
 .
-├── api.py              # FastAPI backend for API, RAG logic, and metrics.
-├── flask_app.py        # Flask web frontend for interactive demo.
-├── rag_logic.py        # RAG pipeline, LLM integration, caching.
-├── requirements.txt    # All Python package dependencies.
-├── apt.txt             # System libraries for OCR and document processing.
-├── render.yaml         # Render.com deployment configuration.
-├── .env.example        # Example environment file.
-├── faiss_indexes/      # Local vector DB storage (auto-created).
-├── static/             # CSS, JS, and image assets for the frontend.
-└── templates/          # HTML templates for the Flask app.
+├── run_flask.py          # Entry point for Flask web UI
+├── run_api.py            # Entry point for FastAPI backend
+├── app/                  # Application package
+│   ├── flask_app.py      # Flask web frontend
+│   ├── api.py            # FastAPI REST API
+│   └── rag_logic.py      # RAG pipeline and caching
+├── core/                 # Core utilities
+│   ├── db.py             # Database logging
+│   └── logger.py         # Performance logging
+├── scripts/              # Standalone utilities
+│   ├── pinecone_uploader.py
+│   └── diagram.py
+├── static/               # CSS, JS assets
+├── templates/            # HTML templates
+├── requirements.txt
+└── .env
 ```
 
 </details>
@@ -182,5 +186,5 @@ Pull requests and forks are welcome! Please create an issue for any bugs or feat
 This project is under a Proprietary License – intended for internal evaluation and hackathons only. For commercial or research use, please contact the repository owner.
 
 <div align="center">
-Made with ❤️ by <a href="https://github.com/ArpitKadam/">Arpit Kadam</a> and Contributors
+Made with ❤️ by Soumith
 </div>

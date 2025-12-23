@@ -18,10 +18,10 @@ from langchain_community.vectorstores import FAISS
 from langchain_pinecone import PineconeVectorStore
 from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
 
-# Local utilities
-from utils.logger import logger
-from utils.db_utils import setup_database, log_request
-import rag_logic  # Reuse create_rag_chain
+# Local utilities - updated imports for new structure
+from core.logger import logger
+from core.db import setup_database, log_request
+from app import rag_logic
 
 # ----------------- Config -----------------
 load_dotenv()
@@ -33,7 +33,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 embeddings = NVIDIAEmbeddings(model="nvidia/nv-embed-v1")
 PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "")
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.secret_key = os.getenv("FLASK_SECRET", "devsecret")
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 80 * 1024 * 1024  # 80MB
